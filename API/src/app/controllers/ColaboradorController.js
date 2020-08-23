@@ -194,6 +194,24 @@ class ColaboradorController {
 
     return res.json(colaboradores);
   }
+
+  async putRemoveImagemColaborador(req, res) {
+    const obj = {
+      nome_logo: null,
+      logo_path: null,
+    };
+
+    const colaborador = await Colaborador.findByPk(req.params.colaboradorId);
+
+    const { id, nome, nome_logo, logo_path } = await colaborador.update(obj);
+
+    return res.json({
+      id,
+      nome,
+      nome_logo,
+      logo_path,
+    });
+  }
 }
 
 export default new ColaboradorController();

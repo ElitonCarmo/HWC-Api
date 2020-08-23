@@ -51,6 +51,16 @@ routes.put('/processostatus', ProcessoStatusController.update);
 
 routes.put('/empresaexterior', EmpresaExteriorController.update);
 
+routes.put(
+  '/cliente/putRemoveImagemCliente/:clienteId',
+  ClienteController.putRemoveImagemCliente
+);
+
+routes.put(
+  '/colaborador/putRemoveImagemColaborador/:colaboradorId',
+  ColaboradorController.putRemoveImagemColaborador
+);
+
 routes.get('/cliente', ClienteController.index);
 
 routes.get('/cliente/getClientesAtivos', ClienteController.getClientesAtivos);

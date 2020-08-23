@@ -211,6 +211,24 @@ class ClienteController {
 
     return res.json(clientes);
   }
+
+  async putRemoveImagemCliente(req, res) {
+    const obj = {
+      nome_logo: null,
+      logo_path: null,
+    };
+
+    const cliente = await Cliente.findByPk(req.params.clienteId);
+
+    const { id, nome, nome_logo, logo_path } = await cliente.update(obj);
+
+    return res.json({
+      id,
+      nome,
+      nome_logo,
+      logo_path,
+    });
+  }
 }
 
 export default new ClienteController();
