@@ -272,6 +272,70 @@ class ProcessoStatusController {
     return res.json(processoStatus);
   }
 
+  async getStatusNaoExibidosParaOCliente(req, res) {
+
+    let listStatus = await ProcessoStatus.findAll({
+      where:{notifica_cliente:1},
+      attributes: [
+        'id', 
+        'processo_servico_id', 
+        'descricao_status', 
+        'notifica_cliente', 
+        'exibe_cliente', 
+        'created_at', 
+        'updated_at'
+      ],
+      include: [
+        {
+          model: ProcessoServico,
+          as: 'processo_Servico',
+          //where: { processo_id: req.query.idCliente },
+          attributes: ['id', 'processo_id'],
+          include:[
+            {
+              model: Processo,
+              as: 'processo',
+              attributes: ['referencia','id', 'cliente_id'],
+              //where: {cliente_id: req.query.idCliente}
+            },
+            {
+              model:Servico,
+              as: 'servico',
+              attributes: ['id', 'nome_servico']
+            }
+          ],
+          
+        }
+      ]
+
+    });
+     
+    
+    return res.json(listStatus);
+  }
+
+
+  async getStatusDoProcesso(req, res) {
+
+    const status = await ProcessoStatus.findAll({
+
+      attributes: ['id', 'processo_servico_id', 'descricao_status', 'notifica_cliente', 'exibe_cliente', 'created_at', 'updated_at'],
+
+      include: [
+        {
+          model: ProcessoServico,
+          as: 'processo_Servico',
+          where: { processo_id: req.query.idProcesso },
+          attributes: ['id', 'processo_id']
+        }
+      ]
+
+    });
+
+    return res.json(status);
+  }
+
+  /*
   async getStatusProcesso(req, res) {
     const processoStatus = await ProcessoStatus.findAll({
       attributes: [
@@ -332,6 +396,7 @@ class ProcessoStatusController {
 
     return res.json(processoStatus);
   }
+  */
 }
 
 export default new ProcessoStatusController();

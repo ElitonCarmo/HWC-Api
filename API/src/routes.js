@@ -116,6 +116,9 @@ routes.get(
   ProcessoStatusController.getStatusDoProcesso
 );
 
+routes.get('/processostatus/getStatusNaoExibidosParaOCliente', ProcessoStatusController.getStatusNaoExibidosParaOCliente);
+
+
 routes.get(
   '/processostatus/getUltimosStatusDoProcesso',
   ProcessoStatusController.getUltimosStatusDoProcesso
