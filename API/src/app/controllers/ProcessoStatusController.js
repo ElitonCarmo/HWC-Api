@@ -187,6 +187,8 @@ class ProcessoStatusController {
     return res.json(processoStatus);
   }
 
+
+
   async getStatusDoProcesso(req, res) {
     const status = await ProcessoStatus.findAll({
       attributes: [
@@ -315,27 +317,9 @@ class ProcessoStatusController {
   }
 
 
-  async getStatusDoProcesso(req, res) {
 
-    const status = await ProcessoStatus.findAll({
 
-      attributes: ['id', 'processo_servico_id', 'descricao_status', 'notifica_cliente', 'exibe_cliente', 'created_at', 'updated_at'],
-
-      include: [
-        {
-          model: ProcessoServico,
-          as: 'processo_Servico',
-          where: { processo_id: req.query.idProcesso },
-          attributes: ['id', 'processo_id']
-        }
-      ]
-
-    });
-
-    return res.json(status);
-  }
-
-  /*
+  
   async getStatusProcesso(req, res) {
     const processoStatus = await ProcessoStatus.findAll({
       attributes: [
@@ -396,7 +380,7 @@ class ProcessoStatusController {
 
     return res.json(processoStatus);
   }
-  */
+  
 }
 
 export default new ProcessoStatusController();
