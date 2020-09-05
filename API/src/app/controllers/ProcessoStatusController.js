@@ -207,6 +207,14 @@ class ProcessoStatusController {
           as: 'processo_Servico',
           where: { processo_id: req.query.idProcesso },
           attributes: ['id', 'processo_id'],
+          
+            include:[
+              {
+                model: Servico,
+                as: 'servico',
+                where: {id, nome_servico}
+              }
+            ],
         },
       ],
     });
