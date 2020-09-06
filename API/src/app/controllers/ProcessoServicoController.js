@@ -1,11 +1,11 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import ProcessoServico from '../models/ProcessoServico';
 import Processo from '../models/Processo';
 import Servico from '../models/Servico';
 import Cliente from '../models/Cliente';
 import Colaborador from '../models/Colaborador';
 import EmpresaExterior from '../models/EmpresaExterior';
-
 
 class ProcessoServicoController {
   async store(req, res) {
@@ -150,18 +150,13 @@ class ProcessoServicoController {
     return res.json(processoServico);
   }
 
-  
   async getTotalServicos(req, res) {
-   
-   let total = 0;
-   // , numero_registro: {[Op.ne]: "" }
-    await ProcessoServico.count({where:{servico_id:req.params.id }}).then(c => {
-      total = c;
-      console.log(req.params.id);
-      console.log('resultado'+c);
+    const total = await ProcessoServico.count({
+      where: { servico_id: req.params.id },
+      numero_registro: { [Op.ne]: '' },
     });
 
-    return res.json({ total});
+    return res.json(total);
   }
 
   async getServicosDoProcesso(req, res) {

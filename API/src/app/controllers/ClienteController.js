@@ -171,25 +171,19 @@ class ClienteController {
     });
   }
 
-
   async alterarConfiguracoes(req, res) {
-   
-    let obj;
+    const obj = {
+      envio_email: req.body.envio_email,
+    };
 
-      obj = { 
-        envio_email: req.body.envio_email,
-      };
-    
     if (req.body.alterarSenha) obj.senha = req.body.senha;
 
     const cliente = await Cliente.findByPk(req.body.id);
 
-    const {
-      id
-    } = await cliente.update(obj);
+    const { id } = await cliente.update(obj);
 
     return res.json({
-      id
+      id,
     });
   }
 
@@ -235,7 +229,6 @@ class ClienteController {
   }
 
   async getClientePorCodigo(req, res) {
-    
     /*
     const clientes = await Cliente.findAll({
       where: { id: req.params.id },
