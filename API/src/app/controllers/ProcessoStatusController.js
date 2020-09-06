@@ -190,6 +190,8 @@ class ProcessoStatusController {
 
 
   async getStatusDoProcesso(req, res) {
+
+
     const status = await ProcessoStatus.findAll({
       attributes: [
         'id',
@@ -212,12 +214,16 @@ class ProcessoStatusController {
               {
                 model: Servico,
                 as: 'servico',
-                where: {id, nome_servico}
+                attributes: ['id', 'nome_servico'],
               }
             ],
         },
       ],
     });
+
+    
+    console.log('Bruno Query 2');
+    console.log(req.query.idProcesso);
 
     return res.json(status);
   }

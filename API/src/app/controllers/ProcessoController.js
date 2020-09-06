@@ -257,6 +257,45 @@ class ProcessoController {
     return res.json(processo);
   }
 
+  async getProcessosPorClienteId(req, res) {
+
+      const processo = await Processo.findAll({
+        where: { cliente_id: req.params.idCliente },
+        order: ['created_at'],
+        attributes: [
+          'id',
+          'tipo_operacao',
+          'referencia',
+          'mercadoria',
+          'cliente_id',
+          'empresaexterior_id',
+          'colaborador_id',
+          'created_at',
+          'updated_at',
+        ],
+        include: [
+          {
+            model: Cliente,
+            as: 'cliente',
+            attributes: ['id', 'nome'],
+          },
+          {
+            model: EmpresaExterior,
+            as: 'empresa',
+            attributes: ['id', 'nome'],
+          },
+          {
+            model: Colaborador,
+            as: 'colaborador',
+            attributes: ['id', 'nome'],
+          },
+        ],
+      });
+  
+      return res.json(processo);
+    }
+  
+
   async getProcessosCliente(req, res) {
     const processo = await Processo.findAll({
       where: { cliente_id: req.LoginId },

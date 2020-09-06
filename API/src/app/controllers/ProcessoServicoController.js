@@ -6,6 +6,7 @@ import Cliente from '../models/Cliente';
 import Colaborador from '../models/Colaborador';
 import EmpresaExterior from '../models/EmpresaExterior';
 
+
 class ProcessoServicoController {
   async store(req, res) {
     const schema = Yup.object().shape({
@@ -147,6 +148,20 @@ class ProcessoServicoController {
     });
 
     return res.json(processoServico);
+  }
+
+  
+  async getTotalServicos(req, res) {
+   
+   let total = 0;
+   // , numero_registro: {[Op.ne]: "" }
+    await ProcessoServico.count({where:{servico_id:req.params.id }}).then(c => {
+      total = c;
+      console.log(req.params.id);
+      console.log('resultado'+c);
+    });
+
+    return res.json({ total});
   }
 
   async getServicosDoProcesso(req, res) {

@@ -28,6 +28,11 @@ routes.post('/processo', ProcessoController.store);
 
 routes.post('/processoservico', ProcessoServicoController.store);
 
+
+routes.get('/processoservico/getTotalServicos/:id', ProcessoServicoController.getTotalServicos);
+
+
+
 routes.post('/processostatus', ProcessoStatusController.store);
 
 routes.post('/empresaexterior', EmpresaExteriorController.store);
@@ -96,6 +101,8 @@ routes.get('/servico/getServicosAtivos', ServicoController.getServicosAtivos);
 
 routes.get('/processo', ProcessoController.index);
 
+routes.get('/processo/cliente/getProcessosPorClienteId/:idCliente', ProcessoController.getProcessosPorClienteId);
+
 routes.get(
   '/processo/getProcessosCliente',
   ProcessoController.getProcessosCliente
@@ -132,6 +139,16 @@ routes.get(
   '/processostatus/:processoId',
   ProcessoStatusController.getStatusProcesso
 );
+
+routes.get(
+  '/cliente/getClientePorCodigo/:id',
+  ClienteController.getClientePorCodigo
+);
+
+
+routes.put('/cliente/alterarConfiguracoes', ClienteController.alterarConfiguracoes);
+
+routes.put('/colaborador/alterarConfiguracoes', ColaboradorController.alterarConfiguracoes);
 
 // multipart form data request
 routes.post('/parametros', upload.single('file'), ParametrosController.store);
