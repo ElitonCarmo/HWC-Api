@@ -152,11 +152,10 @@ class ProcessoServicoController {
 
   async getTotalServicos(req, res) {
     const total = await ProcessoServico.count({
-      where: { servico_id: req.params.id },
-      numero_registro: { [Op.ne]: '' },
+      where: { servico_id: req.params.id, numero_registro: { [Op.ne]: '' } },      
     });
 
-    return res.json(total);
+    return res.json(total+1);
   }
 
   async getServicosDoProcesso(req, res) {
