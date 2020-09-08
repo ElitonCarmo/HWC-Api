@@ -260,7 +260,7 @@ class ProcessoController {
   async getProcessosPorClienteId(req, res) {
     const processo = await Processo.findAll({
       where: { cliente_id: req.params.idCliente },
-      order: ['created_at'],
+      order: [['created_at']],
       attributes: [
         'id',
         'tipo_operacao',
