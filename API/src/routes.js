@@ -38,6 +38,8 @@ routes.post('/cliente', upload.single('file'), ClienteController.store);
 
 routes.post('/colaborador', upload.single('file'), ColaboradorController.store);
 
+routes.get('/', (req, res) => res.send('ok'));
+
 // tudo o que estiver abaixo do middleware necessita do token de autenticação
 routes.use(authMiddleware);
 
