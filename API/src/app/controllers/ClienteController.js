@@ -171,22 +171,6 @@ class ClienteController {
     });
   }
 
-  async alterarConfiguracoes(req, res) {
-    const obj = {
-      envio_email: req.body.envio_email,
-    };
-
-    if (req.body.alterarSenha) obj.senha = req.body.senha;
-
-    const cliente = await Cliente.findByPk(req.body.id);
-
-    const { id } = await cliente.update(obj);
-
-    return res.json({
-      id,
-    });
-  }
-
   async index(req, res) {
     const clientes = await Cliente.findAll({
       attributes: [
@@ -226,31 +210,6 @@ class ClienteController {
     });
 
     return res.json(clientes);
-  }
-
-  async getClientePorCodigo(req, res) {
-    /*
-    const clientes = await Cliente.findAll({
-      where: { id: req.params.id },
-      attributes: [
-        'id',
-        'nome',
-        'nome_logo',
-        'logo_path',
-        'cpf_cnpj',
-        'email',
-        'envio_email',
-        'ativo',
-        'tipo',
-        'created_at',
-        'updated_at',
-      ],
-    });
-    */
-
-    const cliente = await Cliente.findByPk(req.params.id);
-
-    return res.json(cliente);
   }
 
   async putRemoveImagemCliente(req, res) {
