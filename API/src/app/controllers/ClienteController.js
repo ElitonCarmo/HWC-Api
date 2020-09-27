@@ -171,7 +171,7 @@ class ClienteController {
     });
   }
 
-<<<<<<< HEAD
+
   async updateIdCelularCliente(req, res) {
     const schema = Yup.object().shape({
       id: Yup.number(),
@@ -195,7 +195,9 @@ class ClienteController {
     return res.json({
       id,
       id_celular,
-=======
+    });
+  }
+
   async alterarConfiguracoes(req, res) {
     const obj = {
       envio_email: req.body.envio_email,
@@ -209,7 +211,6 @@ class ClienteController {
 
     return res.json({
       id,
->>>>>>> 7888c65630a1d15225b496f025937e02d9025703
     });
   }
 
