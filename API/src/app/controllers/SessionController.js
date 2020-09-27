@@ -17,9 +17,11 @@ class SessionController {
 
     const { email, senha } = req.body;
 
-    const cliente = await Cliente.findOne({ where: { email } });
+    const cliente = await Cliente.findOne({ where: { email, ativo: 1 } });
 
-    const colaborador = await Colaborador.findOne({ where: { email } });
+    const colaborador = await Colaborador.findOne({
+      where: { email, ativo: 1 },
+    });
 
     if (!cliente && !colaborador) {
       return res.status(401).json({ error: 'Usuário não encontrado.' });

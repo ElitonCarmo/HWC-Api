@@ -157,6 +157,20 @@ class ColaboradorController {
     });
   }
 
+  async alterarConfiguracoes(req, res) {
+    const obj = {
+      senha: req.body.senha,
+    };
+
+    const colaborador = await Colaborador.findByPk(req.body.id);
+
+    const { id } = await colaborador.update(obj);
+
+    return res.json({
+      id,
+    });
+  }
+
   async index(req, res) {
     const colaboradores = await Colaborador.findAll({
       attributes: [

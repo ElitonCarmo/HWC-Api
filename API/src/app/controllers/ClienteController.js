@@ -171,6 +171,7 @@ class ClienteController {
     });
   }
 
+<<<<<<< HEAD
   async updateIdCelularCliente(req, res) {
     const schema = Yup.object().shape({
       id: Yup.number(),
@@ -194,6 +195,21 @@ class ClienteController {
     return res.json({
       id,
       id_celular,
+=======
+  async alterarConfiguracoes(req, res) {
+    const obj = {
+      envio_email: req.body.envio_email,
+    };
+
+    if (req.body.alterarSenha) obj.senha = req.body.senha;
+
+    const cliente = await Cliente.findByPk(req.body.id);
+
+    const { id } = await cliente.update(obj);
+
+    return res.json({
+      id,
+>>>>>>> 7888c65630a1d15225b496f025937e02d9025703
     });
   }
 
@@ -236,6 +252,31 @@ class ClienteController {
     });
 
     return res.json(clientes);
+  }
+
+  async getClientePorCodigo(req, res) {
+    /*
+    const clientes = await Cliente.findAll({
+      where: { id: req.params.id },
+      attributes: [
+        'id',
+        'nome',
+        'nome_logo',
+        'logo_path',
+        'cpf_cnpj',
+        'email',
+        'envio_email',
+        'ativo',
+        'tipo',
+        'created_at',
+        'updated_at',
+      ],
+    });
+    */
+
+    const cliente = await Cliente.findByPk(req.params.id);
+
+    return res.json(cliente);
   }
 
   async putRemoveImagemCliente(req, res) {

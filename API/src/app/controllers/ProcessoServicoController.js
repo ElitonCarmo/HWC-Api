@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import ProcessoServico from '../models/ProcessoServico';
 import Processo from '../models/Processo';
 import Servico from '../models/Servico';
@@ -147,6 +148,14 @@ class ProcessoServicoController {
     });
 
     return res.json(processoServico);
+  }
+
+  async getTotalServicos(req, res) {
+    const total = await ProcessoServico.count({
+      where: { servico_id: req.params.id, numero_registro: { [Op.ne]: '' } },      
+    });
+
+    return res.json(total+1);
   }
 
   async getServicosDoProcesso(req, res) {
