@@ -54,6 +54,11 @@ routes.put('/processostatus', ProcessoStatusController.update);
 routes.put('/empresaexterior', EmpresaExteriorController.update);
 
 routes.put(
+  '/cliente/updateIdCelularCliente',
+  ClienteController.updateIdCelularCliente
+);
+
+routes.put(
   '/cliente/putRemoveImagemCliente/:clienteId',
   ClienteController.putRemoveImagemCliente
 );

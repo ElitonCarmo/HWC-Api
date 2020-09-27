@@ -171,6 +171,32 @@ class ClienteController {
     });
   }
 
+  async updateIdCelularCliente(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number(),
+      id_celular: Yup.string(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation Fails.' });
+    }
+
+    const { id } = req.body;
+
+    const cliente = await Cliente.findByPk(req.body.id);
+
+    if (id !== cliente.id) {
+      return res.status(400).json({ error: 'Serviço não existente.' });
+    }
+
+    const { id_celular } = await cliente.update(req.body);
+
+    return res.json({
+      id,
+      id_celular,
+    });
+  }
+
   async index(req, res) {
     const clientes = await Cliente.findAll({
       attributes: [
