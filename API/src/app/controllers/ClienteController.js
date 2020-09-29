@@ -228,6 +228,7 @@ class ClienteController {
         'tipo',
         'created_at',
         'updated_at',
+        'id_celular',
       ],
     });
 
@@ -249,6 +250,7 @@ class ClienteController {
         'tipo',
         'created_at',
         'updated_at',
+        'id_celular',
       ],
     });
 
