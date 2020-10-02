@@ -7,6 +7,7 @@ import Cliente from '../models/Cliente';
 import Colaborador from '../models/Colaborador';
 import EmpresaExterior from '../models/EmpresaExterior';
 import Mail from '../../lib/Mail';
+import axios from 'axios';
 
 class ProcessoStatusController {
   async store(req, res) {
@@ -37,6 +38,10 @@ class ProcessoStatusController {
       exibe_cliente,
     } = await ProcessoStatus.create(req.body);
 
+
+    
+
+
     /* Método para envio de email ao inserir um novo status */
     const clienteEmail = await ProcessoServico.findByPk(
       req.body.processo_servico_id,
@@ -49,13 +54,34 @@ class ProcessoStatusController {
               {
                 model: Cliente,
                 as: 'cliente',
-                attributes: ['nome', 'email', 'envio_email'],
+                attributes: ['nome', 'email', 'envio_email', 'id_celular'],
               },
             ],
           },
         ],
       }
     );
+
+    if(clienteEmail.processo.cliente.id_cliente)
+    {
+      axios
+        .post('https://exp.host/--/api/v2/push/send', {
+         
+            "to": clienteEmail.processo.cliente.id_cliente,
+            "sound": "default",
+            "body": req.body.descricao_status
+          
+        })
+        .then((res) => {
+          console.log('Enviando Notificação')
+          console.log(`statusCode: ${res.statusCode}`)
+          console.log(res)
+        })
+        .catch((error) => {
+          console.log('Enviando Notificação')
+          console.error(error)
+        })
+    }
 
     if (
       clienteEmail.processo.cliente.envio_email === 1 &&
