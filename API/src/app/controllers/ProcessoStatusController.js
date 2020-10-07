@@ -43,7 +43,9 @@ class ProcessoStatusController {
 
 
     /* Método para envio de email ao inserir um novo status */
+    let idCelular = '';
     const clienteEmail = await ProcessoServico.findByPk(
+
       req.body.processo_servico_id,
       {
         include: [
@@ -60,14 +62,17 @@ class ProcessoStatusController {
           },
         ],
       }
-    );
+    ).then(data => {
+      idCelular = data.processo.cliente.id_celular;
+    });
 
-    if(clienteEmail.processo.cliente.id_cliente)
-    {
+  
+    if(idCelular)
+    {     
       axios
         .post('https://exp.host/--/api/v2/push/send', {
          
-            "to": clienteEmail.processo.cliente.id_cliente,
+            "to": idCelular,
             "sound": "default",
             "body": req.body.descricao_status
           
