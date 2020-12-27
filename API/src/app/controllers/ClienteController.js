@@ -1,13 +1,14 @@
 import * as Yup from 'yup';
 import Cliente from '../models/Cliente';
+import ClienteContato from '../models/ClienteContato';
 
 class ClienteController {
   async store(req, res) {
     const schema = Yup.object().shape({
       nome: Yup.string().required(),
       cpf_cnpj: Yup.string().required(),
-      email: Yup.string().email().required(),
-      senha: Yup.string().required().min(6),
+      //email: Yup.string().email().required(),
+      //senha: Yup.string().required().min(6),
       tipo: Yup.string().required(),
     });
 
@@ -93,7 +94,7 @@ class ClienteController {
   async update(req, res) {
     const schema = Yup.object().shape({
       nome: Yup.string(),
-      email: Yup.string().email(),
+      //email: Yup.string().email(),
       cpf_cnpj: Yup.string(),
       tipo: Yup.string(),
     });
@@ -176,21 +177,25 @@ class ClienteController {
     const schema = Yup.object().shape({
       id: Yup.number(),
       id_celular: Yup.string(),
+      email: Yup.string(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation Fails.' });
     }
 
-    const { id } = req.body;
+    const { id, email } = req.body;
 
-    const cliente = await Cliente.findByPk(req.body.id);
+    //const cliente = await Cliente.findByPk(req.body.id);
+    const cliente = await ClienteContato.findOne({
+      where: { email: req.body.email, cliente_id: req.body.id },
+    });
 
     if (id !== cliente.id) {
-      return res.status(400).json({ error: 'Serviço não existente.' });
+      return res.status(400).json({ error: 'Cliente não existente.' });
     }
 
-    const { id_celular } = await cliente.update(req.body);
+    const { id_celular } = await cliente.update({id_celular: req.body.id_celular});
 
     return res.json({
       id,
@@ -201,13 +206,17 @@ class ClienteController {
   async alterarConfiguracoes(req, res) {
     const obj = {
       envio_email: req.body.envio_email,
+      email: req.body.email
     };
 
     if (req.body.alterarSenha) obj.senha = req.body.senha;
 
-    const cliente = await Cliente.findByPk(req.body.id);
+    //const clienteContato = await ClienteContato.findOne(req.body.id);
+    const clienteContato = await ClienteContato.findOne({
+      where: { email: req.body.email, cliente_id: req.body.id },
+    });
 
-    const { id } = await cliente.update(obj);
+    const { id } = await clienteContato.update(obj);
 
     return res.json({
       id,
@@ -277,9 +286,12 @@ class ClienteController {
     });
     */
 
-    const cliente = await Cliente.findByPk(req.params.id);
+    //const cliente = await Cliente.findByPk(req.params.email);
+    const clienteContato = await ClienteContato.findOne({
+      where: { email: req.params.email },
+    });
 
-    return res.json(cliente);
+    return res.json(clienteContato);
   }
 
   async putRemoveImagemCliente(req, res) {

@@ -12,6 +12,7 @@ import ServicoController from './app/controllers/ServicoController';
 import ProcessoController from './app/controllers/ProcessoController';
 import ProcessoServicoController from './app/controllers/ProcessoServicoController';
 import ProcessoStatusController from './app/controllers/ProcessoStatusController';
+import ClienteContatoController from './app/controllers/ClienteContatoController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -40,6 +41,10 @@ routes.post('/empresaexterior', EmpresaExteriorController.store);
 // multipart form data request (Sem necessidade do Token de autenticação)
 
 routes.post('/cliente', upload.single('file'), ClienteController.store);
+
+routes.post('/clienteContato', ClienteContatoController.store);
+routes.get('/clienteContato/:id', ClienteContatoController.getAcessosDeUmaEmpresa);
+routes.put('/clienteContato', ClienteContatoController.update);
 
 routes.post('/colaborador', upload.single('file'), ColaboradorController.store);
 
@@ -151,7 +156,7 @@ routes.get(
 );
 
 routes.get(
-  '/cliente/getClientePorCodigo/:id',
+  '/cliente/getClientePorCodigo/:email',
   ClienteController.getClientePorCodigo
 );
 
