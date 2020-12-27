@@ -16,6 +16,7 @@ class tbcliente extends Model {
         ativo: Sequelize.TINYINT,
         tipo: Sequelize.STRING,
         id_celular: Sequelize.STRING,
+        
         url: {
           type: Sequelize.VIRTUAL,
           get() {

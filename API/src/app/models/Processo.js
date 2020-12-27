@@ -10,6 +10,7 @@ class tbprocesso extends Model {
         cliente_id: Sequelize.INTEGER,
         empresaexterior_id: Sequelize.INTEGER,
         colaborador_id: Sequelize.INTEGER,
+        processofinalizado: Sequelize.INTEGER
       },
       {
         sequelize,

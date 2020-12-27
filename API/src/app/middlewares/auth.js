@@ -4,6 +4,7 @@ import { promisify } from 'util';
 import authConfig from '../../config/auth';
 
 export default async (req, res, next) => {
+  
   if (req.url.includes('/sessions')) return next();
 
   const authHeader = req.headers.authorization;

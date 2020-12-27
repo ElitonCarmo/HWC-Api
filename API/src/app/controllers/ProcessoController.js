@@ -4,6 +4,8 @@ import Cliente from '../models/Cliente';
 import Colaborador from '../models/Colaborador';
 import EmpresaExterior from '../models/EmpresaExterior';
 
+// processoFinalizado
+
 class ProcessoController {
   async store(req, res) {
     const schema = Yup.object().shape({
@@ -86,6 +88,10 @@ class ProcessoController {
         .json({ error: 'Cliente selecionado não é importador.' });
     }
   */
+
+    console.log('Bruno');
+    console.log(req.body);
+
     const {
       id,
       tipo_operacao,
@@ -94,6 +100,7 @@ class ProcessoController {
       cliente_id,
       empresaexterior_id,
       colaborador_id,
+      processofinalizado
     } = await Processo.create(req.body);
 
     return res.json({
@@ -104,6 +111,7 @@ class ProcessoController {
       cliente_id,
       empresaexterior_id,
       colaborador_id,
+      processofinalizado
     });
   }
 
@@ -202,6 +210,10 @@ class ProcessoController {
       }
     }
 
+    
+    console.log('Bruno');
+    console.log(req.body);
+
     const {
       tipo_operacao,
       referencia,
@@ -209,6 +221,7 @@ class ProcessoController {
       cliente_id,
       empresaexterior_id,
       colaborador_id,
+      processofinalizado
     } = await processo.update(req.body);
 
     return res.json({
@@ -219,6 +232,7 @@ class ProcessoController {
       cliente_id,
       empresaexterior_id,
       colaborador_id,
+      processofinalizado
     });
   }
 
@@ -234,6 +248,7 @@ class ProcessoController {
         'colaborador_id',
         'created_at',
         'updated_at',
+        'processofinalizado'
       ],
       include: [
         {
@@ -272,6 +287,7 @@ class ProcessoController {
         'colaborador_id',
         'created_at',
         'updated_at',
+        'processofinalizado'
       ],
       include: [
         {
@@ -309,6 +325,7 @@ class ProcessoController {
         'colaborador_id',
         'created_at',
         'updated_at',
+        'processofinalizado'
       ],
       include: [
         {
@@ -346,6 +363,7 @@ class ProcessoController {
         'colaborador_id',
         'created_at',
         'updated_at',
+        'processofinalizado'
       ],
       include: [
         {
