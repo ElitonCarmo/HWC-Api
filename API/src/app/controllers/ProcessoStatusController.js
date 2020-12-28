@@ -4,6 +4,7 @@ import ProcessoStatus from '../models/ProcessoStatus';
 import Processo from '../models/Processo';
 import Servico from '../models/Servico';
 import Cliente from '../models/Cliente';
+import ClienteContato from '../models/ClienteContato';
 import Colaborador from '../models/Colaborador';
 import EmpresaExterior from '../models/EmpresaExterior';
 import Mail from '../../lib/Mail';
@@ -38,14 +39,9 @@ class ProcessoStatusController {
       exibe_cliente,
     } = await ProcessoStatus.create(req.body);
 
-
-    
-
-
     /* Método para envio de email ao inserir um novo status */
-    let idCelular = '';
+    let idCliente = '', referenciaProcesso = '';
     const clienteEmail = await ProcessoServico.findByPk(
-
       req.body.processo_servico_id,
       {
         include: [
@@ -56,53 +52,79 @@ class ProcessoStatusController {
               {
                 model: Cliente,
                 as: 'cliente',
-                attributes: ['nome', 'email', 'envio_email', 'id_celular'],
+                attributes: ['id', 'nome', 'email'], // 'envio_email', 'id_celular'
               },
             ],
           },
         ],
       }
     ).then(data => {
-      idCelular = data.processo.cliente.id_celular;
+      idCliente = data.processo.cliente.id;
+      referenciaProcesso = data.processo.referencia;
     });
 
-  
-    if(idCelular)
-    {     
-      axios
-        .post('https://exp.host/--/api/v2/push/send', {
-         
-            "to": idCelular,
-            "sound": "default",
-            "body": req.body.descricao_status
+    if (idCliente) {
+
+      let listaContatos = await ClienteContato.findAll({
+        where: { cliente_id: idCliente },
+      })
+
+      listaContatos.forEach((objClienteContato) => {
+
+        let obj = objClienteContato.get({
+          plain: true
+        });
+
+        if (obj.ativo == 1) {
+
+          if (obj.id_celular) {
+            axios
+              .post('https://exp.host/--/api/v2/push/send', {
+
+                "to": obj.id_celular,
+                "sound": "default",
+                "body": req.body.descricao_status
+
+              })
+              .then((res) => {
+                console.log('Enviando Notificação')
+                console.log(`statusCode: ${res.statusCode}`)
+                console.log(res)
+              })
+              .catch((error) => {
+                console.log('Enviando Notificação')
+                console.error(error)
+              })
+          }
+
+          if (obj.envio_email == 1 && obj.email && req.body.notifica_cliente === true) {
+
           
-        })
-        .then((res) => {
-          console.log('Enviando Notificação')
-          console.log(`statusCode: ${res.statusCode}`)
-          console.log(res)
-        })
-        .catch((error) => {
-          console.log('Enviando Notificação')
-          console.error(error)
-        })
+            console.log(obj.nome);
+            console.log(obj.email);
+            console.log(referenciaProcesso);;
+            console.log(req.body.descricao_status);
+
+
+            Mail.sendMail({
+              to: `${obj.nome} <${obj.email}>`,
+              subject: 'Atualização de Status do Processo',
+              template: 'atualizacaoStatus',
+              context: {
+                nome: obj.nome,
+                processo: referenciaProcesso,
+                descricao_status: req.body.descricao_status,
+              },
+            });
+
+          }
+        }
+      });
+
+
+
     }
 
-    if (
-      clienteEmail.processo.cliente.envio_email === 1 &&
-      req.body.notifica_cliente === true
-    ) {
-      await Mail.sendMail({
-        to: `${clienteEmail.processo.cliente.nome} <${clienteEmail.processo.cliente.email}>`,
-        subject: 'Atualização de Status do Processo',
-        template: 'atualizacaoStatus',
-        context: {
-          nome: clienteEmail.processo.cliente.nome,
-          processo: clienteEmail.processo.referencia,
-          descricao_status: req.body.descricao_status,
-        },
-      });
-    }
 
     return res.json({
       id,
