@@ -186,16 +186,12 @@ class ClienteController {
 
     const { id, email } = req.body;
 
-    //const cliente = await Cliente.findByPk(req.body.id);
     const cliente = await ClienteContato.findOne({
       where: { email: req.body.email, cliente_id: req.body.id },
     });
 
-    if (id !== cliente.id) {
-      return res.status(400).json({ error: 'Cliente não existente.' });
-    }
-
-    const { id_celular } = await cliente.update({id_celular: req.body.id_celular});
+    if(cliente)
+      await cliente.update({id_celular: req.body.id_celular});
 
     return res.json({
       id,
