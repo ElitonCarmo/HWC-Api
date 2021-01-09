@@ -99,7 +99,7 @@ class ProcessoStatusController {
 
           if (obj.envio_email == 1 && obj.email && req.body.notifica_cliente === true) {
 
-          
+
             console.log(obj.nome);
             console.log(obj.email);
             console.log(referenciaProcesso);;
@@ -120,12 +120,7 @@ class ProcessoStatusController {
           }
         }
       });
-
-
-
     }
-
-
     return res.json({
       id,
       processo_servico_id,
