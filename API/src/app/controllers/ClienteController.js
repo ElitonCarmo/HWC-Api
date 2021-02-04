@@ -20,8 +20,8 @@ class ClienteController {
         nome_logo: null,
         logo_path: null,
         cpf_cnpj: req.body.cpf_cnpj,
-        email: req.body.email,
-        senha: req.body.senha,
+        //email: req.body.email,
+        //senha: req.body.senha,
         tipo: req.body.tipo,
       };
     } else {
@@ -30,35 +30,46 @@ class ClienteController {
         nome_logo: req.file.originalname,
         logo_path: req.file.filename,
         cpf_cnpj: req.body.cpf_cnpj,
-        email: req.body.email,
-        senha: req.body.senha,
+        //email: req.body.email,
+        //senha: req.body.senha,
         tipo: req.body.tipo,
       };
     }
+
+    console.log('Bruno Teste 1 ');
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation Fails.' });
     }
 
+    console.log('Bruno Teste 2 ');
+    /*
     const emailExiste = await Cliente.findOne({
       where: { email: req.body.email },
     });
+    */
 
     const cpf_cnpj_Existe = await Cliente.findOne({
       where: { cpf_cnpj: req.body.cpf_cnpj },
     });
 
+    console.log('Bruno Teste 3 ');
+    /*
     if (emailExiste) {
       return res
         .status(400)
         .json({ error: 'E-mail do cliente já cadastrado.' });
     }
+  */
 
     if (cpf_cnpj_Existe) {
       return res
         .status(400)
         .json({ error: 'CPF ou CNPJ do cliente já cadastrado.' });
     }
+
+    
+    console.log('Bruno Teste 4 ');
     // Retornar objeto completo da tabela
     // const cliente = await Cliente.create(req.body);
 
