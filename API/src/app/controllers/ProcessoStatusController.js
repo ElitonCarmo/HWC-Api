@@ -99,24 +99,46 @@ class ProcessoStatusController {
 
           if (obj.envio_email == 1 && obj.email && req.body.notifica_cliente === true) {
 
+            const SENDGRID_API_KEY = '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'
+          
+            var bodyEmail = `
+              Olá, <strong>${obj.nome} </strong>
+              <br/>
+              <p>O status do seu processo <strong>${referenciaProcesso}</strong> foi atualizado para: <strong>${req.body.descricao_status}</strong></p>
+              
 
-            console.log(obj.nome);
-            console.log(obj.email);
-            console.log(referenciaProcesso);;
-            console.log(req.body.descricao_status);
+              Equipe HW Comex
+            `;
 
+            var postData = {
+              "personalizations":
+                [
+                  {
+                    "to": [{ "email": obj.email }]
+                  }
+                ],
+              "from": { "email": "app@hwcomex.com" },
+              "subject": "Atualização de Status do Processo",
+              "content": [{ "type": "text/html", "value": bodyEmail }]
+            };
 
-            Mail.sendMail({
-              to: `${obj.nome} <${obj.email}>`,
-              subject: 'Atualização de Status do Processo',
-              template: 'atualizacaoStatus',
-              context: {
-                nome: obj.nome,
-                processo: referenciaProcesso,
-                descricao_status: req.body.descricao_status,
-              },
-            });
+            let axiosConfig = {
+              headers: {
+                'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+                'Content-Type': 'application/json'
+              }
+            };
 
+            axios
+              .post('https://api.sendgrid.com/v3/mail/send', postData, axiosConfig              
+            ).then((res) => {
+              console.log('Email Enviado')
+
+            })
+              .catch((error) => {
+                console.log('Email não Enviado')
+                console.error(error)
+              });
           }
         }
       });
