@@ -10,6 +10,7 @@ import Processo from '../app/models/Processo';
 import ProcessoServico from '../app/models/ProcessoServico';
 import ProcessoStatus from '../app/models/ProcessoStatus';
 import ClienteContato from '../app/models/ClienteContato';
+import ConfigServico from '../app/models/ConfigServico';
 
 import databaseConfig from '../config/database';
 
@@ -23,7 +24,8 @@ const models = [
   ProcessoServico,
   ProcessoStatus,
   EmpresaExterior,
-  ClienteContato
+  ClienteContato,
+  ConfigServico
 ];
 
 const modelsAssociate = [Log, Processo, ProcessoServico, ProcessoStatus];

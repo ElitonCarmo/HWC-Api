@@ -7,6 +7,7 @@ import Cliente from '../models/Cliente';
 import ClienteContato from '../models/ClienteContato';
 import Colaborador from '../models/Colaborador';
 import EmpresaExterior from '../models/EmpresaExterior';
+import ConfigServico from '../models/ConfigServico';
 import Mail from '../../lib/Mail';
 import axios from 'axios';
 
@@ -69,6 +70,8 @@ class ProcessoStatusController {
         where: { cliente_id: idCliente },
       })
 
+      var configServico = await ConfigServico.findByPk(1);
+
       listaContatos.forEach((objClienteContato) => {
 
         let obj = objClienteContato.get({
@@ -99,8 +102,7 @@ class ProcessoStatusController {
 
           if (obj.envio_email == 1 && obj.email && req.body.notifica_cliente === true) {
 
-            const SENDGRID_API_KEY = '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'
-          
+         
             var bodyEmail = `
               Olá, <strong>${obj.nome} </strong>
               <br/>
@@ -124,13 +126,13 @@ class ProcessoStatusController {
 
             let axiosConfig = {
               headers: {
-                'Authorization': `Bearer ${SENDGRID_API_KEY}`,
+                'Authorization': `Bearer ${configServico.apikey_email}`,
                 'Content-Type': 'application/json'
               }
             };
 
             axios
-              .post('https://api.sendgrid.com/v3/mail/send', postData, axiosConfig              
+              .post(configServico.urlapi_email, postData, axiosConfig              
             ).then((res) => {
               console.log('Email Enviado')
 
